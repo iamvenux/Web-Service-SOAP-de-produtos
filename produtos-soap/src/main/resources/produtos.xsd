@@ -27,4 +27,16 @@
         </xs:complexType>
     </xs:element>
 
+    <!-- FAULT: detalhe enviado dentro do <detail> do SOAP Fault.
+         O sufixo "Fault" faz o DefaultWsdl11Definition publicar
+         este elemento como wsdl:fault da operação consultarProduto. -->
+    <xs:element name="consultarProdutoFault">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="codigo" type="xs:string"/>
+                <xs:element name="mensagem" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
 </xs:schema>
