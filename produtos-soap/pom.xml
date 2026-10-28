@@ -40,6 +40,12 @@
     		<artifactId>wsdl4j</artifactId>
 		</dependency>
 
+		<!-- WS-Security: Wss4jSecurityInterceptor (traz o Apache WSS4J como dependência) -->
+		<dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-ws-security</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webservices-test</artifactId>
