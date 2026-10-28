@@ -1,5 +1,7 @@
 package br.gov.sp.cps.produtos_soap.endpoint;
 
+import br.gov.sp.cps.produtos_soap.exception.CodigoInvalidoException;
+import br.gov.sp.cps.produtos_soap.exception.ProdutoNaoEncontradoException;
 import br.gov.sp.cps.produtos_soap.model.ConsultarProdutoRequest;
 import br.gov.sp.cps.produtos_soap.model.ConsultarProdutoResponse;
 
@@ -28,20 +30,24 @@ public class ProdutoEndpoint {
     @ResponsePayload
     public ConsultarProdutoResponse consultarProduto(@RequestPayload ConsultarProdutoRequest request) {
 
-        ConsultarProdutoResponse response = new ConsultarProdutoResponse();
-        Produto p = PRODUTOS.get(request.getCodigo());
+        int codigo = request.getCodigo();
 
-        if (p != null) {
-            response.setNome(p.nome());
-            response.setDescricao(p.descricao());
-            response.setMarca(p.marca());
-            response.setQuantidadeEstoque(p.estoque());
-        } else {
-            response.setNome("Produto não encontrado");
-            response.setDescricao("-");
-            response.setMarca("-");
-            response.setQuantidadeEstoque(0);
+        // Validação de entrada: vira SOAP Fault "Client" (CODIGO_INVALIDO)
+        if (codigo <= 0) {
+            throw new CodigoInvalidoException(codigo);
         }
+
+        // Produto inexistente: vira SOAP Fault "Client" (PRODUTO_NAO_ENCONTRADO)
+        Produto p = PRODUTOS.get(codigo);
+        if (p == null) {
+            throw new ProdutoNaoEncontradoException(codigo);
+        }
+
+        ConsultarProdutoResponse response = new ConsultarProdutoResponse();
+        response.setNome(p.nome());
+        response.setDescricao(p.descricao());
+        response.setMarca(p.marca());
+        response.setQuantidadeEstoque(p.estoque());
 
         return response;
     }
